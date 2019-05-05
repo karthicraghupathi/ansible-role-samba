@@ -1,2 +1,46 @@
 ---
 # defaults file for ansible-role-samba
+
+ansible_become: true
+
+samba_admin_password: ""
+
+# This option specifies the kerberos realm to use.
+# The realm is used as the ADS equivalent of the NT4 domain.
+# It is usually set to the DNS name of the kerberos server. 
+samba_realm: ""
+
+samba_domain: ""
+
+# DNS updates can either be disallowed completely by setting it to disabled,
+# enabled over secure connections only by setting it to secure only or allowed
+# in all cases by setting it to nonsecure.
+samba_allow_dns_updates: nonsecure
+
+# The value of the parameter (a astring) allows the debug level (logging level)
+# to be specified in the smb.conf file. 
+# https://www.samba.org/samba/docs/current/man-html/smb.conf.5.html#LOGLEVEL
+samba_log_level: 2 dns:1
+
+# This parameter configures logging backends. Multiple backends can be specified
+# at the same time, with different log levels for each backend. The parameter is
+# a list of backends, where each backend is specified as backend[:option][@loglevel].
+# https://www.samba.org/samba/docs/current/man-html/smb.conf.5.html#LOGGING
+samba_logging: syslog file
+
+# This parameter determines whether or not smbd(8) will attempt to authenticate
+# users using the NTLM encrypted password response for this local passdb (SAM or
+# account database).
+# https://www.samba.org/samba/docs/current/man-html/smb.conf.5.html#NTLMAUTH
+samba_ntlm_auth: ntlmv1-permitted
+
+# When filling out the user information for a Windows NT user, the winbindd(8)
+# daemon uses this parameter to fill in the home directory for that user. If the
+# string %D is present it is substituted with the user's Windows NT domain name.
+# If the string %U is present it is substituted with the user's Windows NT user name.
+# https://www.samba.org/samba/docs/current/man-html/smb.conf.5.html#TEMPLATEHOMEDIR
+samba_template_homedir: /home/%U
+
+# When filling out the user information for a Windows NT user, the winbindd(8)
+# daemon uses this parameter to fill in the login shell for that user.
+samba_template_shell: /bin/bash

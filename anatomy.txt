@@ -1,0 +1,44 @@
+.
+├── defaults
+│   └── main.yml
+├── files
+├── handlers
+│   └── main.yml
+├── meta
+│   └── main.yml
+├── tasks
+│   └── main.yml
+├── templates
+└── vars
+    └── main.yml
+
+defaults
+- The defaults directory is designated for variable defaults that take the lowest precedence.
+- Put another way: If a variable is defined nowhere else, the definition given in defaults/main.yml will be used.
+
+files and templates
+- files contain affiliated files that are used within the role.
+- templates contain Ansible templates that are used within the role.
+- Ansible does not need a path for resources stored in them when working in the role. Ansible checks them first.
+- You may still use the full path if you want to reference files outside of the role.
+
+handlers
+- Directory to store Ansible handlers.
+- Handlers are tasks that may be flagged during a play to run at a play's completion.
+
+meta
+- Directory contains authorship information.
+- Useful when publishing your role to Ansible galaxy.
+- Also used to define role dependencies. This allows other roles to be installed prior to the current role.
+
+tasks
+- Directory where plays for your role are written.
+- Ideally, each logically related series of tasks would be laid out in their own files,
+  and simply included through the main.yml file in the tasks directory.
+
+vars
+- Create variable files that define necessary variables for your role.
+- The variables defined in this directory are meant for role internal use only.
+- It is a good idea to namespace your role variable names, to prevent potential naming conflicts with variables outside of your role.
+- For example, if you needed a variable named config_file in your baseline playbook,
+  you may want to name your variable baseline_config_file, to avoid conflicts with another possible config_file variable defined elsewhere.

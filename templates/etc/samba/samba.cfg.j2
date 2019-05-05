@@ -1,0 +1,22 @@
+[global]
+   workgroup = {{ samba_workgroup }}
+   dns forwarder = {{ samba_dns_forwarder }}
+   netbios name = {{ samba_netbios_name | default(inventory_hostname_short) | upper }}
+   realm = {{ samba_realm }}
+   server role = {{ samba_server_role }}
+   idmap_ldb:use rfc2307 = {{ samba_idmap_ldb_use_rfc2307 }}
+   allow dns updates = {{ samba_allow_dns_updates }}
+   log level = {{ samba_log_level }}
+   logging = {{ samba_logging }}
+   ntlm auth = {{ samba_ntlm_auth }}
+   template shell = {{ samba_template_shell }}
+   template homedir = {{ samba_template_homedir }}
+   server string = %h Server (Samba, Ubuntu)
+
+[netlogon]
+   path = /var/lib/samba/sysvol/{{ samba_realm|lower }}/scripts
+   read only = No
+
+[sysvol]
+   path = /var/lib/samba/sysvol
+   read only = No

@@ -1,5 +1,71 @@
 ---
 # tasks file for ansible-role-samba
-- name: print distro information
+- name: debug variable test
   debug:
-    msg: "{{ ansible_distribution }} {{ ansible_distribution_version }}"
+    var: samba_admin_password
+
+# - name: install packages required for samba
+#   apt:
+#     name:
+#         - samba
+#         - winbind
+#         - libnss-winbind
+#         - libpam-winbind
+#         - krb5-user
+#     update_cache: yes
+
+- name: check if domain exists
+  shell: samba-tool domain info 127.0.0.1
+  register: result_check_samba_domain_exists
+  ignore_errors: true
+
+- name: debug result check if domain exists
+  debug:
+    var: result_check_samba_domain_exists
+
+- name: create backup of original sambe configuration file /etc/samba/smb.conf
+  command: mv /etc/samba/smb.conf /etc/samba/smb.conf.original
+  when: result_check_samba_domain_exists.failed
+  ignore_errors: true
+
+- name: create samba ad domain
+  shell: >
+    samba-tool domain provision --use-rfc2307
+    --realm={{ samba_realm|upper }}
+    --domain={{ samba_domain|default(samba_realm.split(".")[0], true)|upper }}
+    --adminpass={{ samba_admin_password }}
+    --server-role=dc
+  register: result_samba_domain_creation
+  when: result_check_samba_domain_exists.failed
+
+- name: debug result create samba ad domain
+  debug:
+    var: result_samba_domain_creation
+
+- name: check if domain exists
+  shell: samba-tool domain info 127.0.0.1
+  register: result_check_samba_domain_exists
+
+- name: debug result check if domain exists
+  debug:
+    var: result_check_samba_domain_exists
+
+# - name: archive existing /etc/krb5.conf
+#   template:
+#       src: etc/krb5.conf.j2
+#       dest: /etc/krb5.conf
+#       owner: root
+#       group: root
+#       mode: 0644
+#       backup: yes
+
+# - name: archive existing /etc/samba/smb.conf
+#   template:
+#       src: etc/samba/samba.cfg.j2
+#       dest: /etc/samba/smb.conf
+#       owner: root
+#       group: root
+#       mode: 0644
+#       backup: yes
+#   notify:
+#     - restart samba-ad-dc

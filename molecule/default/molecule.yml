@@ -8,10 +8,21 @@ lint:
 platforms:
   - name: ubuntu1804
     image: ubuntu:18.04
+    groups:
+      - ubuntu
   - name: ubuntu1604
     image: ubuntu:16.04
+    groups:
+      - ubuntu
 provisioner:
   name: ansible
+  log: False
+  inventory:
+    group_vars:
+      ubuntu:
+        samba_realm: test.com
+        samba_domain: testdomain
+        samba_admin_password: P@55word
   lint:
     name: ansible-lint
 verifier:
