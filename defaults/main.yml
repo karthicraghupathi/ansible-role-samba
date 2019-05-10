@@ -1,7 +1,7 @@
 ---
 # defaults file for ansible-role-samba
 
-ansible_become: true
+samba_force_domain_creation: false
 
 samba_admin_password: ""
 
